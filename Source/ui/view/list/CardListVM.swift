@@ -33,7 +33,7 @@ class CardListVM: ViewModel, ObservableObject {
                     }
                     break
                 case let .failure(anError):
-                    self.title = "Wegen eines Fehlers sind Previews nicht verfügbar"
+                    AlertBox.shared.show(title: "Repository", details: anError.localizedDescription)
                     logErr(msg: anError.localizedDescription)
                     break
                 }

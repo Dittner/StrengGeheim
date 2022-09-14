@@ -5,6 +5,7 @@ enum CardIndexRepositoryError: DetailedError {
     case createStorageDirFailed(details: String)
     case readIndexFromDiscFailed(details: String)
     case jsonDeserializationFailed(path: String, details: String)
+    case encryptionDataFailed(path: String, details: String)
 }
 
 class CardIndexRepository: IIndexRepository {
@@ -12,7 +13,7 @@ class CardIndexRepository: IIndexRepository {
     private var hash: [CardIndexID: CardIndex] = [:]
     private let serializer: IIndexSerializer
     private let dispatcher: DomainEventDispatcher
-    private(set) var isReady: Bool = false
+    private var cryptor: Cryptor?
 
     init(serializer: IIndexSerializer, dispatcher: DomainEventDispatcher, storeTo: URL) {
         logInfo(msg: "CardIndexRepository init, url: \(storeTo)")
@@ -54,6 +55,10 @@ class CardIndexRepository: IIndexRepository {
         return url.appendingPathComponent(id.rawValue.description + ".sg")
     }
 
+    func applyCryptor(_ cryptor: Cryptor) {
+        self.cryptor = cryptor
+    }
+
     func read(_ id: CardIndexID) -> AnyPublisher<CardIndex?, CardIndexRepositoryError> {
         logInfo(msg: "repo.read, cardIndexID=" + id.rawValue.description)
         let p = Future<CardIndex?, CardIndexRepositoryError> { promise in
@@ -65,18 +70,26 @@ class CardIndexRepository: IIndexRepository {
                 let fileURL = self.getIndexStoreURL(id)
                 logInfo(msg: "Repo: loading the cardIndex...")
                 do {
-                    let data = try Data(contentsOf: fileURL)
-                    let res = try self.serializer.deserialize(data: data)
-                    self.hash[id] = res
-                    promise(.success(res))
+                    let encryptedData = try Data(contentsOf: fileURL)
+                    do {
+                        let data = try self.cryptor?.decrypt(encryptedData) ?? encryptedData
+                        let res = try self.serializer.deserialize(data: data)
+                        self.hash[id] = res
+                        promise(.success(res))
+
+                    } catch {
+                        let errDetails = "Repo: encryption data is failed: \(error.localizedDescription)"
+                        let err = CardIndexRepositoryError.encryptionDataFailed(path: fileURL.path, details: errDetails)
+                        promise(.failure(err))
+                    }
                 } catch {
-                    let errDetails = "Failed to deserialize a book, url: \(fileURL), details: \(error.localizedDescription)"
+                    let errDetails = "Failed to deserialize an index with id: \(id), details: \(error.localizedDescription)"
                     let err = CardIndexRepositoryError.jsonDeserializationFailed(path: fileURL.path, details: errDetails)
                     // logErr(msg: errDetails)
                     promise(.failure(err))
                 }
             } else {
-                logInfo(msg: "Repo: CardIndex not found")
+                logInfo(msg: "Repo: CardIndex with id=\(id) does not exist")
                 promise(.success(nil))
             }
         }
@@ -99,7 +112,11 @@ class CardIndexRepository: IIndexRepository {
         DispatchQueue.global(qos: .utility).sync {
             do {
                 let fileUrl = self.getIndexStoreURL(index.id)
-                let data = try self.serializer.serialize(index)
+                var data = try self.serializer.serialize(index)
+                if let cryptor = cryptor {
+                    data = try cryptor.encrypt(data)
+                }
+
                 do {
                     try data.write(to: fileUrl)
                     logInfo(msg: "Repo: index with id=\(index.id.rawValue) has been successfully stored")

@@ -6,7 +6,7 @@ class AlertBox: ObservableObject {
 
     @Published var message: AlertMessage? = nil
 
-    func show(title: LocalizedStringKey, details: LocalizedStringKey) {
+    func show(title: String, details: String) {
         if message == nil {
             message = AlertMessage(title: title, details: details)
         }
@@ -15,6 +15,6 @@ class AlertBox: ObservableObject {
 
 struct AlertMessage: Identifiable {
     let id = UID()
-    let title: LocalizedStringKey
-    let details: LocalizedStringKey
+    let title: String
+    let details: String
 }
