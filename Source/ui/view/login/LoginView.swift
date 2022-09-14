@@ -9,11 +9,6 @@ struct LoginView: View {
             VStack(alignment: .center, spacing: 20) {
                 Spacer()
 
-                Text("S.....G.....")
-                    .font(Font.custom(.helveticaNeue, size: 50))
-                    .lineLimit(1)
-                    .foregroundColor(Color.SG.tint.color)
-
                 Text("Schlüssel")
                     .allowsTightening(false)
                     .font(Font.custom(.helveticaNeue, size: 11))
@@ -35,7 +30,7 @@ struct LoginView: View {
 
                 Button(action: vm.login) {
                     Text("Anmelden")
-                        .font(Font.custom(.helveticaNeue, size: 16))
+                        .font(Font.custom(.helveticaNeue, size: 18))
                         .lineLimit(1)
                         .frame(width: 300, height: 45)
                         .foregroundColor(Color.SG.black.color)

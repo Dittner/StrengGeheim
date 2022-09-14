@@ -19,7 +19,7 @@ class SGContext {
         dispatcher = DomainEventDispatcher()
         repo = CardIndexRepository(serializer: IndexSerializer(dispatcher: dispatcher),
                                    dispatcher: dispatcher,
-                                   storeTo: URLS.documentsURL)
+                                   storeTo: URLS.documentsURL.appendingPathComponent("index"))
     }
     
     private static func logAbout() {

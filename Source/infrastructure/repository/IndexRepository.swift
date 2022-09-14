@@ -38,10 +38,13 @@ class CardIndexRepository: IIndexRepository {
     private var disposeBag: Set<AnyCancellable> = []
     private func subscribeToDispatcher() {
         dispatcher.subject
+            // .debounce(for: 0.1, scheduler: RunLoop.main)
             .sink { event in
                 switch event {
                 case let .indexStateChanged(index):
-                    self.store(index)
+                    self.hash[index.id] = index
+                    self.pendingIndicesToStore.append(index.id)
+                    self.storeChanges()
                 }
             }
             .store(in: &disposeBag)
@@ -51,16 +54,16 @@ class CardIndexRepository: IIndexRepository {
         return url.appendingPathComponent(id.rawValue.description + ".sg")
     }
 
-    func read(_ id: CardIndexID) -> AnyPublisher<CardIndex, CardIndexRepositoryError> {
+    func read(_ id: CardIndexID) -> AnyPublisher<CardIndex?, CardIndexRepositoryError> {
         logInfo(msg: "repo.read, cardIndexID=" + id.rawValue.description)
-        let p = Future<CardIndex, CardIndexRepositoryError> { promise in
+        let p = Future<CardIndex?, CardIndexRepositoryError> { promise in
 
             if let res = self.hash[id] {
-                logInfo(msg: "hash has a cardIndex")
+                logInfo(msg: "Repo: the hash has the cardIndex")
                 promise(.success(res))
             } else if FileManager.default.fileExists(atPath: self.getIndexStoreURL(id).path) {
                 let fileURL = self.getIndexStoreURL(id)
-                logInfo(msg: "loading cardIndex...")
+                logInfo(msg: "Repo: loading the cardIndex...")
                 do {
                     let data = try Data(contentsOf: fileURL)
                     let res = try self.serializer.deserialize(data: data)
@@ -73,13 +76,23 @@ class CardIndexRepository: IIndexRepository {
                     promise(.failure(err))
                 }
             } else {
-                logInfo(msg: "Create new CardIndex")
-                let res = CardIndex(id: id, cards: [])
-                self.hash[id] = res
-                promise(.success(res))
+                logInfo(msg: "Repo: CardIndex not found")
+                promise(.success(nil))
             }
         }
         return p.eraseToAnyPublisher()
+    }
+
+    private var pendingIndicesToStore: [CardIndexID] = []
+    private func storeChanges() {
+        Async.after(milliseconds: 1000) {
+            for indexID in self.pendingIndicesToStore.removeDuplicates() {
+                if let index = self.hash[indexID] {
+                    self.store(index)
+                }
+            }
+            self.pendingIndicesToStore = []
+        }
     }
 
     private func store(_ index: CardIndex) {
@@ -89,11 +102,12 @@ class CardIndexRepository: IIndexRepository {
                 let data = try self.serializer.serialize(index)
                 do {
                     try data.write(to: fileUrl)
+                    logInfo(msg: "Repo: index with id=\(index.id.rawValue) has been successfully stored")
                 } catch {
-                    logErr(msg: "Failed to write index with id=\(index.id.rawValue.description) on disc, details:  \(error.localizedDescription)")
+                    logErr(msg: "Repo: Failed to write index with id=\(index.id.rawValue) on disc, details:  \(error.localizedDescription)")
                 }
             } catch {
-                logErr(msg: "Failed to serialize index with id=\(index.id.rawValue.description), details:  \(error.localizedDescription)")
+                logErr(msg: "Repo: Failed to serialize index with id=\(index.id.rawValue), details:  \(error.localizedDescription)")
             }
         }
     }

@@ -37,7 +37,7 @@ class IndexSerializer: IIndexSerializer {
         let dto = try decoder.decode(IndexDTO.self, from: data)
         let cards = try readCards(cards: dto.cards)
 
-        return CardIndex(id: dto.id, cards: cards)
+        return CardIndex(id: dto.id, cards: cards, dispatcher: dispatcher)
     }
 
     func readCards(cards: [CardDTO]) throws -> [Card] {

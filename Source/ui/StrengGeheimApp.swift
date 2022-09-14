@@ -45,6 +45,13 @@ struct ContentView: View {
                         .offset(x: pos * geo.size.width, y: 0)
                         .transition(.move(edge: navigator.screenPosition.goBack ? .leading : .trailing))
                 }
+                
+                if let pos = navigator.screenPosition.xPosition(id: .cardEdit) {
+                    CardEditView()
+                        .background(AppBG())
+                        .offset(x: pos * geo.size.width, y: 0)
+                        .transition(.move(edge: navigator.screenPosition.goBack ? .leading : .trailing))
+                }
             }
             .alert(item: $alertBox.message) { msg in
                 Alert(
@@ -59,6 +66,6 @@ struct ContentView: View {
 
 struct AppBG: View {
     var body: some View {
-        Color.SG.appBgColor.color.edgesIgnoringSafeArea(.bottom)
+        Color.SG.appBg.color.ignoresSafeArea()
     }
 }

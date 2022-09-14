@@ -1,28 +1,22 @@
 import SwiftUI
 
 enum FontName: String {
-    case icons = "BrainCacheIcons"
+    case icons = "icomoon"
     case helveticaNeue = "Helvetica Neue"
     case helveticaThin = "Helvetica Neue Thin"
     case helveticaLight = "Helvetica Neue Light"
     case helveticaNeueBold = "Helvetica Neue Bold"
     case mono = "Menlo-Regular"
+    case gothic = "Halja OT"
 }
 
 enum FontIcon: String {
-    case next = "\u{e900}"
-    case prev = "\u{e901}"
-    case folder = "\u{e902}"
-    case plus = "\u{e903}"
-    case table = "\u{e904}"
-    case file = "\u{e905}"
-    case search = "\u{e906}"
-    case close = "\u{e907}"
-    case minus = "\u{e908}"
-    case list = "\u{e909}"
-    case sort = "\u{e90a}"
-    case dropdown = "\u{e90b}"
-    case arrow = "\u{e90c}"
+    case next = "\u{e903}"
+    case prev = "\u{e905}"
+    case plus = "\u{e904}"
+    case edit = "\u{e902}"
+    case apply = "\u{e900}"
+    case cancel = "\u{e901}"
 }
 
 extension UIFont {

@@ -9,7 +9,7 @@ struct HSeparatorView: View {
     }
 
     var body: some View {
-        Color.SG.white.color.opacity(0.15)
+        Color.SG.text.color.opacity(0.15)
             .padding(.horizontal, horizontalPadding)
             .frame(height: 0.5)
             .frame(maxWidth: .infinity)

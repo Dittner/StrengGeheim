@@ -30,14 +30,17 @@ struct NavigationBar<Content: View>: View {
 
         }
         .frame(maxWidth: .infinity, maxHeight: Constants.navigationBarHeight)
-        .background(NavigationBarBG())
+        .background(NavigationBarBG()
+                        .cornerRadius(radius: 20, corners: [.bottomLeft, .bottomRight])
+                        .edgesIgnoringSafeArea(.top))
+        .frame(maxWidth: .infinity, maxHeight: Constants.navigationBarHeight)
         .zIndex(2)
     }
 }
 
 struct NavigationBarBG: View {
     var body: some View {
-        Color.SG.black.color
+        Color.SG.navbarBg.color
     }
 }
 

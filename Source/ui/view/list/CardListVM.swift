@@ -15,7 +15,7 @@ class CardListVM: ViewModel, ObservableObject {
 
     var loadCardsPublisher: AnyCancellable?
     override func screenActivated() {
-        logInfo(msg: "CardListVM screenActivated")
+        super.screenActivated()
         isLoading = true
         cards = []
 
@@ -38,8 +38,13 @@ class CardListVM: ViewModel, ObservableObject {
                     break
                 }
             }, receiveValue: { cardIndex in
-                self.user.selectedIndex = cardIndex
-                self.cards = cardIndex.cards.filter { $0.text != "" }
+                if let cardIndex = cardIndex {
+                    self.user.selectedIndex = cardIndex
+                    self.cards = cardIndex.cards.filter { $0.text != "" }
+                } else {
+                    let newIndex = CardIndex.create(id: indexID)
+                    self.user.selectedIndex = newIndex
+                }
             })
     }
 
@@ -49,13 +54,15 @@ class CardListVM: ViewModel, ObservableObject {
     }
 
     func goBack() {
-        self.user.selectedIndex = nil
+        user.selectedIndex = nil
         user.selectedCard = nil
         navigator.goBack(to: .index)
     }
-    
+
     func createCard() {
-        user.selectedCard = nil
-        navigator.navigate(to: .cardEdit)
+        if let selectedIndex = self.user.selectedIndex {
+            user.selectedCard = selectedIndex.addNewCard()
+            navigator.navigate(to: .cardEdit)
+        }
     }
 }

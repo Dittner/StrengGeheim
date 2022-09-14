@@ -2,7 +2,7 @@ import Combine
 import Foundation
 
 protocol IIndexRepository {
-    func read(_ id: CardIndexID) -> AnyPublisher<CardIndex, CardIndexRepositoryError>
+    func read(_ id: CardIndexID) -> AnyPublisher<CardIndex?, CardIndexRepositoryError>
 }
 
 protocol IIndexSerializer {

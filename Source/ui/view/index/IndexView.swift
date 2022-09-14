@@ -13,8 +13,8 @@ struct IndexView: View {
                     }.navigationBarLeading(navigationBarSideWidth)
 
                     Text("INDEX")
-                        .font(Font.custom(.helveticaNeue, size: 18))
-                        .foregroundColor(Color.SG.tint.color)
+                        .font(Font.custom(.helveticaNeueBold, size: 18))
+                        .foregroundColor(Color.SG.navbarTitle.color)
                         .navigationBarTitle(navigationBarSideWidth)
 
                 }
@@ -46,14 +46,14 @@ struct IndexIDCell: View {
                 Spacer()
 
                 Text(title)
-                    .font(Font.custom(.helveticaLight, size: 24))
-                    .foregroundColor(Color.SG.white.color)
+                    .font(Font.custom(.helveticaNeue, size: 24))
+                    .foregroundColor(Color.SG.text.color)
                     .lineLimit(1)
                     .frame(height: Constants.cellHeight)
 
                 Spacer()
 
-                IconButton(name: .next, size: Constants.iconSize, iconColor: Color.SG.white.color) {
+                IconButton(name: .next, size: Constants.iconSize, iconColor: Color.SG.dark.color) {
                     self.selectAction()
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
