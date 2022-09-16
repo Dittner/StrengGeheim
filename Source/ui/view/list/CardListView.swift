@@ -57,29 +57,26 @@ struct CardCell: View {
     }
 
     var body: some View {
-        HStack(alignment: .center, spacing: 0) {
-            Spacer().frame(width: 20)
+        VStack(alignment: .leading, spacing: 5) {
+            Text(title)
+                .font(Font.custom(.OpenSansSemibold, size: 21))
+                .foregroundColor(Color.SG.text)
 
-            VStack(alignment: .leading, spacing: 5) {
-                Text(title)
-                    .font(Font.custom(.OpenSansSemibold, size: 21))
-                    .foregroundColor(Color.SG.text)
+            Text(text)
+                .fixedSize(horizontal: false, vertical: true)
+                .font(Font.custom(.OpenSansReg, size: 18))
+                .foregroundColor(Color.SG.text)
+                .padding(.bottom, 25)
 
-                Text(text)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .font(Font.custom(.OpenSansLight, size: 21))
-                    .foregroundColor(Color.SG.text)
-                    .padding(.bottom, 25)
-
-                HSeparatorView(horizontalPadding: 0)
-                    .padding(.leading, -20)
-                    .padding(.trailing, -50)
-            }
-
-            IconButton(name: .next, size: Constants.iconSize, iconColor: Color.SG.dark) {
+            HSeparatorView(horizontalPadding: 0)
+                .padding(.leading, -20)
+                .padding(.trailing, -50)
+        }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .background(Color.SG.transparent)
+        .padding(.horizontal, 20)
+            .onTapGesture(count: 2, perform: {
                 self.editAction()
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            })
+            
     }
 }

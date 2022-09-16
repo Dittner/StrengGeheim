@@ -6,6 +6,7 @@ class CardEditVM: ViewModel, ObservableObject {
     @Published var title: String = ""
     @Published var text: String = ""
     @Published var cardPos: Int = 0
+    @Published var showAlert: Bool = false
     private var originalCardPos: Int = 0
     private var cardIndex: CardIndex?
 
@@ -42,10 +43,6 @@ class CardEditVM: ViewModel, ObservableObject {
         }
     }
 
-    func cancel() {
-        goBack()
-    }
-
     func apply() {
         if let selectedCard = user.selectedCard {
             selectedCard.title = title
@@ -72,13 +69,22 @@ class CardEditVM: ViewModel, ObservableObject {
 
     func removeCard() {
         guard let selectedCard = user.selectedCard, let cardIndex = cardIndex else { return }
-        cardIndex.removeCard(selectedCard)
-        goBack()
+        if showAlert {
+            cardIndex.removeCard(selectedCard)
+            goBack()
+        } else {
+            showAlert = true
+        }
+    }
+
+    func cancelRemove() {
+        showAlert = false
     }
 
     func goBack() {
         Keyboard.dismiss()
         user.selectedCard = nil
+        showAlert = false
         navigator.goBack(to: .cardList)
     }
 }

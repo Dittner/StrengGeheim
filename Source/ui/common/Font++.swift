@@ -6,17 +6,18 @@ enum FontName: String {
     case helveticaThin = "Helvetica Neue Thin"
     case helveticaLight = "Helvetica Neue Light"
     case helveticaNeueBold = "Helvetica Neue Bold"
-    case pragmatica = "PragmaticaBook-Reg"
-    case pragmaticaLight = "PragmaticaLight"
+    
     case OpenSansReg = "OpenSans"
     case OpenSansLight = "OpenSans-Light"
     case OpenSansSemibold = "OpenSans-Semibold"
+    //case pragmatica = "PragmaticaBook-Reg"
+    //case pragmaticaLight = "PragmaticaLight"
     //case pragmaticaLightItalics = "PragmaticaLight-Oblique"
     //case pragmaticaExtraLight = "PragmaticaExtraLight-Reg"
     //case pragmaticaExtraLightItalics = "PragmaticaExtraLight-Oblique"
-    case pragmaticaSemiBold = "PragmaticaMedium"
+    //case pragmaticaSemiBold = "PragmaticaMedium"
     case mono = "Menlo-Regular"
-    case gothic = "Halja OT"
+    //case gothic = "Halja OT"
 }
 
 enum FontIcon: String {

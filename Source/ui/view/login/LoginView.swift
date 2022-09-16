@@ -23,7 +23,7 @@ struct LoginView: View {
                     SecureField("", text: $vm.user.password) {
                         vm.login()
                     }
-                    .font(Font.custom(.OpenSansSemibold, size: 25))
+                    .font(Font.custom(.OpenSansSemibold, size: 20))
                     .frame(width: 280, height: 50, alignment: .leading)
                     .foregroundColor(Color.SG.tint)
                     .padding(.horizontal, 10)

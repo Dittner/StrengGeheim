@@ -15,7 +15,7 @@ struct CardEditView: View {
 //                    .navigationBarLeading(navigationBarSideWidth)
 
                     IconButton(name: .prev, size: Constants.iconSize, iconColor: Color.SG.tint) {
-                        self.vm.cancel()
+                        self.vm.goBack()
                     }.navigationBarLeading(navigationBarSideWidth)
 
                     Text("Karte")
@@ -94,7 +94,7 @@ struct CardForm: View {
 
                 TextEditor(text: $vm.text)
                     .textFieldStyle(PlainTextFieldStyle())
-                    .font(Font.custom(.OpenSansLight, size: 21))
+                    .font(Font.custom(.OpenSansReg, size: 18))
                     .foregroundColor(Color.SG.text)
                     .padding(.horizontal, 5)
                     .padding(.top, 12)
@@ -102,7 +102,7 @@ struct CardForm: View {
 
             #elseif os(OSX)
 
-                MacEditorTextView(text: $vm.text, isEditable: true, font: NSFont(name: .OpenSansLight, size: 21),
+                MacEditorTextView(text: $vm.text, isEditable: true, font: NSFont(name: .OpenSansReg, size: 18),
                                   onEditingChanged: {}, onCommit: {}, onTextChange: { _ in })
                     .padding(.leading, 5)
                     .padding(.trailing, -15)
@@ -110,15 +110,31 @@ struct CardForm: View {
                     .background(Color.SG.black.cornerRadius(6))
 
             #endif
-            
+
             Button(action: vm.removeCard) {
                 Text("Löschen")
                     .font(Font.custom(.helveticaNeue, size: 18))
                     .lineLimit(1)
                     .frame(height: 45)
-                    .frame(maxWidth: .infinity, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                    .frame(maxWidth: .infinity, alignment: /*@START_MENU_TOKEN@*/ .center/*@END_MENU_TOKEN@*/)
                     .foregroundColor(Color.SG.tint)
             }.buttonStyle(PlainButtonStyle())
+                .popover(isPresented: self.$vm.showAlert, arrowEdge: .bottom) {
+                    VStack(alignment: .center, spacing: 10) {
+                        Text("Soll die Karte gelöscht werden?")
+                            .font(Font.custom(.helveticaNeue, size: 18))
+                            .foregroundColor(Color.SG.navbarTitle)
+                        
+                        HStack(alignment: .center, spacing: 10) {
+                            TextButton(text: "Nein", textColor: Color.SG.navbarTitle, font: Font.custom(.helveticaNeueBold, size: 18)) {
+                                vm.cancelRemove()
+                            }.frame(width: 100, alignment: .center)
+                            TextButton(text: "Ja", textColor: Color.SG.tint, font: Font.custom(.helveticaNeueBold, size: 18)) {
+                                vm.removeCard()
+                            }.frame(width: 100, alignment: .center)
+                        }
+                    }.padding()
+                }
 
             Spacer()
 
