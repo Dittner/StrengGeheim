@@ -7,18 +7,7 @@
 
 import SwiftUI
 
-@main
-struct StrengGeheimApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .preferredColorScheme(.dark)
-                .environment(\.colorScheme, .dark)
-        }
-    }
-}
-
-struct ContentView: View {
+struct ContentViewIOS: View {
     @ObservedObject var navigator = Navigator.shared
     @ObservedObject var alertBox = AlertBox.shared
 
@@ -30,6 +19,7 @@ struct ContentView: View {
                         .background(AppBG())
                         .offset(x: pos * geo.size.width, y: 0)
                         .transition(.move(edge: navigator.screenPosition.goBack ? .leading : .trailing))
+                        .ignoresSafeArea(.keyboard, edges: .bottom)
                 }
 
                 if let pos = navigator.screenPosition.xPosition(id: .index) {
@@ -38,14 +28,14 @@ struct ContentView: View {
                         .offset(x: pos * geo.size.width, y: 0)
                         .transition(.move(edge: navigator.screenPosition.goBack ? .leading : .trailing))
                 }
-                
+
                 if let pos = navigator.screenPosition.xPosition(id: .cardList) {
                     CardListView()
                         .background(AppBG())
                         .offset(x: pos * geo.size.width, y: 0)
                         .transition(.move(edge: navigator.screenPosition.goBack ? .leading : .trailing))
                 }
-                
+
                 if let pos = navigator.screenPosition.xPosition(id: .cardEdit) {
                     CardEditView()
                         .background(AppBG())
@@ -61,11 +51,13 @@ struct ContentView: View {
                 )
             }
         }
+        .preferredColorScheme(.dark)
+        .environment(\.colorScheme, .dark)
     }
 }
 
 struct AppBG: View {
     var body: some View {
-        Color.SG.appBg.color.ignoresSafeArea()
+        Color.SG.appBg.ignoresSafeArea()
     }
 }

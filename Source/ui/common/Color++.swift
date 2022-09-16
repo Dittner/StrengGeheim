@@ -2,7 +2,7 @@ import SwiftUI
 
 extension Color {
     static let SG = SGColors()
-    
+
     init(rgb: UInt) {
         self.init(
             red: Double((rgb & 0xFF0000) >> 16) / 255.0,
@@ -12,31 +12,64 @@ extension Color {
     }
 }
 
-extension UIColor {
-    convenience init(rgb: UInt, alpha: CGFloat = 1) {
-        self.init(
-            red: CGFloat((rgb & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgb & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgb & 0x0000FF) / 255.0,
-            alpha: alpha
-        )
+// extension UIColor {
+//    convenience init(rgb: UInt, alpha: CGFloat = 1) {
+//        self.init(
+//            red: CGFloat((rgb & 0xFF0000) >> 16) / 255.0,
+//            green: CGFloat((rgb & 0x00FF00) >> 8) / 255.0,
+//            blue: CGFloat(rgb & 0x0000FF) / 255.0,
+//            alpha: alpha
+//        )
+//    }
+//
+//    var color: Color {
+//        Color(self)
+//    }
+// }
+
+#if os(iOS)
+
+    struct SGColors {
+        let tint: Color = Color(rgb: 0x8C85B3)
+        let text: Color = Color(rgb: 0xC8C8CF)
+        let black: Color = Color(rgb: 0x19191d)
+        let gray: Color = Color(rgb: 0x828287)
+        let dark: Color = Color(rgb: 0x5B5B5E)
+        let red: Color = Color(rgb: 0x7F2843)
+        let invalid: Color = Color(rgb: 0xCC8888)
+        let transparent: Color = Color(rgb: 0).opacity(0.001)
+        let navbarBg: Color = Color(rgb: 0x27282e)
+        let navbarTitle: Color = Color(rgb: 0xa5a3ad)
+        let appBg: Color = Color(rgb: 0x191a1e)
     }
 
-    var color: Color {
-        Color(self)
+#elseif os(OSX)
+    struct SGColors {
+        let tint: Color = Color(rgb: 0x9d99b2)
+        let text: Color = Color(rgb: 0xC8C8CF)
+        let black: Color = Color(rgb: 0x19191d)
+        let gray: Color = Color(rgb: 0x828287)
+        let dark: Color = Color(rgb: 0x5B5B5E)
+        let red: Color = Color(rgb: 0x7F2843)
+        let invalid: Color = Color(rgb: 0xCC8888)
+        let transparent: Color = Color(rgb: 0).opacity(0.001)
+        let navbarBg: Color = Color(rgb: 0x27282e)
+        let navbarTitle: Color = Color(rgb: 0xa5a3ad)
+        let appBg: Color = Color(rgb: 0x202126)
     }
-}
 
-struct SGColors {
-    let tint: UIColor = UIColor(rgb: 0x8c85b3)
-    let text: UIColor = UIColor(rgb: 0xc8c8cf)
-    let black: UIColor = UIColor(rgb: 0)
-    let gray: UIColor = UIColor(rgb: 0x919197)
-    let dark: UIColor = UIColor(rgb: 0x3b3b3e)
-    let red: UIColor = UIColor(rgb: 0x7f2843)
-    let invalid: UIColor = UIColor(rgb: 0xcc8888)
-    let transparent: UIColor = UIColor(rgb: 0, alpha: 0.001)
-    let navbarBg: UIColor = UIColor(rgb: 0x1d1f20)
-    let navbarTitle: UIColor = UIColor(rgb: 0x9d9ab0)
-    let appBg: UIColor = UIColor(rgb: 0x131414)
-}
+    extension NSColor {
+        convenience init(rgb: UInt, alpha: CGFloat = 1) {
+            self.init(
+                red: CGFloat((rgb & 0xFF0000) >> 16) / 255.0,
+                green: CGFloat((rgb & 0x00FF00) >> 8) / 255.0,
+                blue: CGFloat(rgb & 0x0000FF) / 255.0,
+                alpha: alpha
+            )
+        }
+
+        public static let SG = (tint: NSColor(rgb: 0x9d99b2, alpha: 1),
+                                black: NSColor(rgb: 0x19191d, alpha: 1),
+                                text: NSColor(rgb: 0xC8C8CF, alpha: 1))
+    }
+#endif

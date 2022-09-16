@@ -31,7 +31,7 @@ struct NavigationBar<Content: View>: View {
         }
         .frame(maxWidth: .infinity, maxHeight: Constants.navigationBarHeight)
         .background(NavigationBarBG()
-                        .cornerRadius(radius: 20, corners: [.bottomLeft, .bottomRight])
+                        .cornerRadius(20)
                         .edgesIgnoringSafeArea(.top))
         .frame(maxWidth: .infinity, maxHeight: Constants.navigationBarHeight)
         .zIndex(2)
@@ -40,7 +40,7 @@ struct NavigationBar<Content: View>: View {
 
 struct NavigationBarBG: View {
     var body: some View {
-        Color.SG.navbarBg.color
+        Color.SG.navbarBg
     }
 }
 
@@ -93,32 +93,6 @@ struct NavigationBarTitle: ViewModifier {
         content
             .padding(.horizontal, navigationBarSideWidth.wrappedValue)
             .frame(maxWidth: .infinity)
-    }
-}
-
-extension View {
-    func cornerRadius(radius: CGFloat, corners: UIRectCorner) -> some View {
-        ModifiedContent(content: self, modifier: CornerRadiusStyle(radius: radius, corners: corners))
-    }
-}
-
-struct CornerRadiusStyle: ViewModifier {
-    var radius: CGFloat
-    var corners: UIRectCorner
-
-    struct CornerRadiusShape: Shape {
-        var radius = CGFloat.infinity
-        var corners = UIRectCorner.allCorners
-
-        func path(in rect: CGRect) -> Path {
-            let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-            return Path(path.cgPath)
-        }
-    }
-
-    func body(content: Content) -> some View {
-        content
-            .clipShape(CornerRadiusShape(radius: radius, corners: corners))
     }
 }
 

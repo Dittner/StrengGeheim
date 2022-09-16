@@ -3,7 +3,7 @@ import Combine
 class ViewModel {
     private(set) var screenID: ScreenID
     private(set) var navigator: Navigator
-    public var user: User
+    @Published var user: User
     private(set) var repo: IIndexRepository
     private(set) var dispatcher: DomainEventDispatcher
     private var navigatorSubscription: AnyCancellable?

@@ -1,17 +1,37 @@
 import Combine
 import SwiftUI
 
-struct HSeparatorView: View {
-    let horizontalPadding: CGFloat
+#if os(iOS)
 
-    init(horizontalPadding: CGFloat = 0) {
-        self.horizontalPadding = horizontalPadding
+    struct HSeparatorView: View {
+        let horizontalPadding: CGFloat
+
+        init(horizontalPadding: CGFloat = 0) {
+            self.horizontalPadding = horizontalPadding
+        }
+
+        var body: some View {
+            Color.SG.text.opacity(0.1)
+                .padding(.horizontal, horizontalPadding)
+                .frame(height: 0.5)
+                .frame(maxWidth: .infinity)
+        }
     }
 
-    var body: some View {
-        Color.SG.text.color.opacity(0.15)
-            .padding(.horizontal, horizontalPadding)
-            .frame(height: 0.5)
-            .frame(maxWidth: .infinity)
+#elseif os(OSX)
+    struct HSeparatorView: View {
+        let horizontalPadding: CGFloat
+
+        init(horizontalPadding: CGFloat = 0) {
+            self.horizontalPadding = horizontalPadding
+        }
+
+        var body: some View {
+            Color.SG.text.opacity(0.1)
+                .padding(.horizontal, horizontalPadding)
+                .frame(height: 1)
+                .frame(maxWidth: .infinity)
+        }
     }
-}
+
+#endif

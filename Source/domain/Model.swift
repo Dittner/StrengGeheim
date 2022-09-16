@@ -5,7 +5,7 @@ class User: ObservableObject {
     var selectedIndexID: CardIndexID?
     @Published var selectedCard: Card?
     @Published var selectedIndex: CardIndex?
-    @Published var password: String = "1234"
+    @Published var password: String = ""
 
     fileprivate var encryptedPwd: String = ""
     var isLoggedIn: Bool = false
@@ -40,12 +40,12 @@ enum CardIndexID: String, Codable, CaseIterable {
     case bank
     case personal
     case mail
-    case password
+    case website
     case todo
     case schedule
 
     static var allCases: [CardIndexID] {
-        return [.bank, .personal, .mail, .password, .todo, .schedule]
+        return [.bank, .personal, .mail, .website, .todo, .schedule]
     }
 
     func getTitle() -> String {
@@ -53,7 +53,7 @@ enum CardIndexID: String, Codable, CaseIterable {
         case .bank: return "Bankverbindungen"
         case .personal: return "Persönliche Daten"
         case .mail: return "E-Mails"
-        case .password: return "Schlüssel"
+        case .website: return "Webseiten"
         case .todo: return "ToDo"
         case .schedule: return "Termine"
         }
@@ -82,6 +82,27 @@ class CardIndex: ObservableObject, Identifiable {
         c.index = self
         cards.insert(c, at: 0)
         return c
+    }
+    
+    func removeCard(_ card: Card) {
+        for i in self.cards.indices {
+            if card.uid == cards[i].uid {
+                self.cards.remove(at: i)
+                self.dispatcher.notify(.indexStateChanged(index: self))
+                break
+            }
+        }
+    }
+    
+    func moveCard(_ card:Card, to: Int) {
+        for i in self.cards.indices {
+            if card.uid == cards[i].uid {
+                self.cards.remove(at: i)
+                self.cards.insert(card, at: to)
+                self.dispatcher.notify(.indexStateChanged(index: self))
+                break
+            }
+        }
     }
 }
 

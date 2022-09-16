@@ -38,6 +38,32 @@ struct IconButton: View {
     }
 }
 
+struct BlackIconButton: View {
+    var name: FontIcon
+    var size: CGFloat
+    var iconColor: Color
+    let onAction: () -> Void
+
+    @State private var onPressed = false
+
+    var body: some View {
+        Icon(name: name, size: size)
+            .frame(width: 50, height: 50, alignment: .center)
+            .contentShape(Rectangle())
+            .foregroundColor(iconColor)
+            .background(onPressed ? Color.SG.black : Color.SG.navbarBg)
+            .cornerRadius(6)
+            .onTapGesture {
+                self.onAction()
+            }
+            .pressAction {
+                self.onPressed = true
+            } onRelease: {
+                self.onPressed = false
+            }
+    }
+}
+
 struct TextButton: View {
     var text: LocalizedStringKey
     var textColor: Color

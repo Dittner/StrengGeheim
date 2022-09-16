@@ -13,17 +13,17 @@ struct CardEditView: View {
 //                    }
 //                    .padding(.horizontal)
 //                    .navigationBarLeading(navigationBarSideWidth)
-                    
-                    IconButton(name: .cancel, size: Constants.iconSize, iconColor: Color.SG.tint.color) {
+
+                    IconButton(name: .prev, size: Constants.iconSize, iconColor: Color.SG.tint) {
                         self.vm.cancel()
                     }.navigationBarLeading(navigationBarSideWidth)
 
                     Text("Karte")
                         .font(Font.custom(.helveticaNeueBold, size: 18))
-                        .foregroundColor(Color.SG.navbarTitle.color)
+                        .foregroundColor(Color.SG.navbarTitle)
                         .navigationBarTitle(navigationBarSideWidth)
-                    
-                    IconButton(name: .apply, size: Constants.iconSize, iconColor: Color.SG.tint.color) {
+
+                    IconButton(name: .apply, size: Constants.iconSize, iconColor: Color.SG.tint) {
                         self.vm.apply()
                     }.navigationBarTrailing(navigationBarSideWidth)
                 }
@@ -41,43 +41,113 @@ struct CardForm: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("Titel")
+            Text("TITEL")
                 .allowsTightening(false)
-                .font(Font.custom(.helveticaNeue, size: 11))
+                .font(Font.custom(.helveticaNeue, size: 12))
                 .lineLimit(1)
-                .foregroundColor(Color.SG.gray.color)
-                .frame(width: 300, alignment: .leading)
-                .offset(x: 10, y: 15)
+                .foregroundColor(Color.SG.gray)
+                .offset(x: 10, y: 16)
                 .zIndex(1)
 
-            TextField("", text: $vm.title)
-                .font(Font.custom(.helveticaNeue, size: 16))
-                .frame(height: 40, alignment: .leading)
-                .foregroundColor(Color.SG.text.color)
-                .padding(.horizontal, 10)
-                .padding(.top, 10)
-                .background(Color.black.cornerRadius(6))
-            
-            Text("Inhalt")
+            HStack(alignment: .center, spacing: 5) {
+                #if os(iOS)
+
+                    TextField("", text: $vm.title)
+                        .font(Font.custom(.OpenSansSemibold, size: 21))
+                        .frame(height: 40, alignment: .leading)
+                        .foregroundColor(Color.SG.text)
+                        .padding(.horizontal, 10)
+                        .padding(.top, 10)
+                        .background(Color.black.cornerRadius(6))
+
+                #elseif os(OSX)
+
+                    TextInput(title: "", text: $vm.title, textColor: NSColor.SG.text, font: NSFont(name: .OpenSansSemibold, size: 21), alignment: .left, isFocused: false, isSecure: false, format: nil, isEditable: true, onEnterAction: {})
+                        .frame(height: 40, alignment: .leading)
+                        .padding(.horizontal, 10)
+                        .padding(.top, 10)
+                        .saturation(0)
+                        .background(Color.SG.black.cornerRadius(6))
+
+                #endif
+
+                CardPosition()
+
+                BlackIconButton(name: .increase, size: Constants.iconSize, iconColor: Color.SG.text) {
+                    self.vm.incCardPosition()
+                }
+
+                BlackIconButton(name: .decrease, size: Constants.iconSize, iconColor: Color.SG.text) {
+                    self.vm.decCardPosition()
+                }
+            }
+
+            Text("INHALT")
                 .allowsTightening(false)
-                .font(Font.custom(.helveticaNeue, size: 11))
+                .font(Font.custom(.helveticaNeue, size: 12))
                 .lineLimit(1)
-                .foregroundColor(Color.SG.gray.color)
-                .frame(width: 300, alignment: .leading)
-                .offset(x: 10, y: 15)
+                .foregroundColor(Color.SG.gray)
+                .offset(x: 10, y: 16)
                 .zIndex(1)
+
+            #if os(iOS)
+
+                TextEditor(text: $vm.text)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .font(Font.custom(.OpenSansLight, size: 21))
+                    .foregroundColor(Color.SG.text)
+                    .padding(.horizontal, 5)
+                    .padding(.top, 12)
+                    .background(Color.black.cornerRadius(6))
+
+            #elseif os(OSX)
+
+                MacEditorTextView(text: $vm.text, isEditable: true, font: NSFont(name: .OpenSansLight, size: 21),
+                                  onEditingChanged: {}, onCommit: {}, onTextChange: { _ in })
+                    .padding(.leading, 5)
+                    .padding(.trailing, -15)
+                    .padding(.top, 20)
+                    .background(Color.SG.black.cornerRadius(6))
+
+            #endif
             
-            TextEditor(text: $vm.text)
-                .textFieldStyle(PlainTextFieldStyle())
-                .font(Font.custom(.helveticaNeue, size: 16))
-                .foregroundColor(Color.SG.text.color)
-                .padding(.horizontal, 5)
-                .padding(.top, 12)
-                .background(Color.black.cornerRadius(6))
-            
+            Button(action: vm.removeCard) {
+                Text("Löschen")
+                    .font(Font.custom(.helveticaNeue, size: 18))
+                    .lineLimit(1)
+                    .frame(height: 45)
+                    .frame(maxWidth: .infinity, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                    .foregroundColor(Color.SG.tint)
+            }.buttonStyle(PlainButtonStyle())
+
             Spacer()
 
         }.frame(maxWidth: .infinity)
-        .padding(.horizontal)
+            .padding(.horizontal)
+    }
+}
+
+struct CardPosition: View {
+    @ObservedObject var vm = CardEditVM.shared
+
+    var body: some View {
+        ZStack {
+            Text("POS.")
+                .allowsTightening(false)
+                .font(Font.custom(.helveticaNeue, size: 12))
+                .lineLimit(1)
+                .foregroundColor(Color.SG.gray)
+                .offset(x: 0, y: -15)
+                .zIndex(1)
+
+            Text("\(vm.cardPos)")
+                .allowsTightening(false)
+                .font(Font.custom(.OpenSansSemibold, size: 21))
+                .lineLimit(1)
+                .foregroundColor(Color.SG.text)
+                .frame(width: 50, height: 50, alignment: .center)
+                .offset(x: 0, y: 5)
+                .background(Color.SG.black.cornerRadius(6))
+        }
     }
 }

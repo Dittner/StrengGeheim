@@ -8,16 +8,16 @@ struct CardListView: View {
         ZStack {
             VStack(alignment: .center, spacing: 0) {
                 NavigationBar { navigationBarSideWidth in
-                    IconButton(name: .prev, size: Constants.iconSize, iconColor: Color.SG.tint.color) {
+                    IconButton(name: .prev, size: Constants.iconSize, iconColor: Color.SG.tint) {
                         self.vm.goBack()
                     }.navigationBarLeading(navigationBarSideWidth)
 
                     Text(vm.title)
                         .font(Font.custom(.helveticaNeueBold, size: 18))
-                        .foregroundColor(Color.SG.navbarTitle.color)
+                        .foregroundColor(Color.SG.navbarTitle)
                         .navigationBarTitle(navigationBarSideWidth)
 
-                    IconButton(name: .plus, size: Constants.iconSize, iconColor: Color.SG.tint.color) {
+                    IconButton(name: .plus, size: Constants.iconSize, iconColor: Color.SG.tint) {
                         self.vm.createCard()
                     }.navigationBarTrailing(navigationBarSideWidth)
                 }
@@ -29,7 +29,7 @@ struct CardListView: View {
                 } else {
                     ScrollView {
                         Spacer().frame(height: 20)
-                        LazyVStack(spacing: 10) {
+                        VStack(spacing: 20) {
                             ForEach(vm.cards, id: \.self.uid) { card in
                                 CardCell(card) {
                                     self.vm.editCard(card)
@@ -62,19 +62,21 @@ struct CardCell: View {
 
             VStack(alignment: .leading, spacing: 5) {
                 Text(title)
-                    .font(Font.custom(.helveticaNeueBold, size: 18))
-                    .foregroundColor(Color.SG.text.color)
+                    .font(Font.custom(.OpenSansSemibold, size: 21))
+                    .foregroundColor(Color.SG.text)
 
                 Text(text)
-                    .font(Font.custom(.helveticaNeue, size: 18))
-                    .foregroundColor(Color.SG.text.color)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .font(Font.custom(.OpenSansLight, size: 21))
+                    .foregroundColor(Color.SG.text)
+                    .padding(.bottom, 25)
 
                 HSeparatorView(horizontalPadding: 0)
+                    .padding(.leading, -20)
+                    .padding(.trailing, -50)
             }
 
-            Spacer()
-
-            IconButton(name: .next, size: Constants.iconSize, iconColor: Color.SG.dark.color) {
+            IconButton(name: .next, size: Constants.iconSize, iconColor: Color.SG.dark) {
                 self.editAction()
             }
         }

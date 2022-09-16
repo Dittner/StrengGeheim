@@ -1,11 +1,11 @@
-//
-//  SGContext.swift
-//  StrengGeheim
-//
-//  Created by Alexander Dittner on 01.03.2021.
-//
+import Combine
+import Foundation
+import SwiftUI
 
-import UIKit
+#if os(iOS)
+    import UIKit
+#endif
+
 class SGContext {
     static var shared: SGContext = SGContext()
     private(set) var user: User
@@ -17,21 +17,38 @@ class SGContext {
         logInfo(msg: "SharedContext initialized")
         user = User()
         dispatcher = DomainEventDispatcher()
+        
+        #if os(iOS)
+
         repo = CardIndexRepository(serializer: IndexSerializer(dispatcher: dispatcher),
                                    dispatcher: dispatcher,
-                                   storeTo: URLS.documentsURL.appendingPathComponent("index"))
+                                   storeTo: URLS.documentsURL.appendingPathComponent("Index"))
+        #elseif os(OSX)
+        repo = CardIndexRepository(serializer: IndexSerializer(dispatcher: dispatcher),
+                                   dispatcher: dispatcher,
+                                   storeTo: URLS.documentsURL.appendingPathComponent("StrengGeheim/Index"))
+        #endif
     }
-    
+
     private static func logAbout() {
         var aboutLog: String = "StrengGeheimLogs\n"
-        let ver: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0"
-        let build: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0"
-        aboutLog += "v." + ver + "." + build + "\n"
+        #if os(iOS)
+            let ver: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0"
+            let build: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0"
+            aboutLog += "v." + ver + "." + build + "\n"
 
-        let device = UIDevice.current
-        aboutLog += "simulator: " + device.isSimulator.description + "\n"
-        aboutLog += "device: " + device.modelName + "\n"
-        aboutLog += "os: " + device.systemName + " " + device.systemVersion + "\n"
+            let device = UIDevice.current
+            aboutLog += "simulator: " + device.isSimulator.description + "\n"
+            aboutLog += "device: " + device.modelName + "\n"
+            aboutLog += "os: " + device.systemName + " " + device.systemVersion + "\n"
+
+        #elseif os(OSX)
+
+            let home = FileManager.default.homeDirectoryForCurrentUser
+            aboutLog += "home dir = \(home.description)"
+
+        #endif
+
         #if DEBUG
             aboutLog += "debug mode\n"
             aboutLog += "docs folder: \\" + URLS.documentsURL.description
@@ -41,4 +58,6 @@ class SGContext {
 
         logInfo(msg: aboutLog)
     }
+
+    func run() {}
 }

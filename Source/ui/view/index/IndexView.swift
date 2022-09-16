@@ -8,13 +8,13 @@ struct IndexView: View {
         ZStack {
             VStack(alignment: .center, spacing: 0) {
                 NavigationBar { navigationBarSideWidth in
-                    IconButton(name: .prev, size: Constants.iconSize, iconColor: Color.SG.tint.color) {
+                    IconButton(name: .prev, size: Constants.iconSize, iconColor: Color.SG.tint) {
                         self.vm.goBack()
                     }.navigationBarLeading(navigationBarSideWidth)
 
                     Text("INDEX")
                         .font(Font.custom(.helveticaNeueBold, size: 18))
-                        .foregroundColor(Color.SG.navbarTitle.color)
+                        .foregroundColor(Color.SG.navbarTitle)
                         .navigationBarTitle(navigationBarSideWidth)
 
                 }
@@ -46,14 +46,14 @@ struct IndexIDCell: View {
                 Spacer()
 
                 Text(title)
-                    .font(Font.custom(.helveticaNeue, size: 24))
-                    .foregroundColor(Color.SG.text.color)
+                    .font(Font.custom(.OpenSansSemibold, size: 21))
+                    .foregroundColor(Color.SG.text)
                     .lineLimit(1)
                     .frame(height: Constants.cellHeight)
 
                 Spacer()
 
-                IconButton(name: .next, size: Constants.iconSize, iconColor: Color.SG.dark.color) {
+                IconButton(name: .next, size: Constants.iconSize, iconColor: Color.SG.dark) {
                     self.selectAction()
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
