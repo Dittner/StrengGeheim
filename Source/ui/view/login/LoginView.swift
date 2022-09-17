@@ -28,7 +28,7 @@ struct LoginView: View {
                     .foregroundColor(Color.SG.tint)
                     .padding(.horizontal, 10)
                     .padding(.top, 5)
-                    .background(Color.black.cornerRadius(6))
+                    .background(Color.SG.black.cornerRadius(6))
                     .contentShape(Rectangle())
 
                 #elseif os(OSX)

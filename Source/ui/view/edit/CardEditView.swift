@@ -58,7 +58,7 @@ struct CardForm: View {
                         .foregroundColor(Color.SG.text)
                         .padding(.horizontal, 10)
                         .padding(.top, 10)
-                        .background(Color.black.cornerRadius(6))
+                        .background(Color.SG.black.cornerRadius(6))
 
                 #elseif os(OSX)
 
@@ -98,7 +98,7 @@ struct CardForm: View {
                     .foregroundColor(Color.SG.text)
                     .padding(.horizontal, 5)
                     .padding(.top, 12)
-                    .background(Color.black.cornerRadius(6))
+                    .background(Color.SG.black.cornerRadius(6))
 
             #elseif os(OSX)
 

@@ -11,7 +11,7 @@ import SwiftUI
         }
 
         var body: some View {
-            Color.SG.text.opacity(0.1)
+            Color.SG.text.opacity(0.2)
                 .padding(.horizontal, horizontalPadding)
                 .frame(height: 0.5)
                 .frame(maxWidth: .infinity)
@@ -27,7 +27,7 @@ import SwiftUI
         }
 
         var body: some View {
-            Color.SG.text.opacity(0.1)
+            Color.SG.text.opacity(0.2)
                 .padding(.horizontal, horizontalPadding)
                 .frame(height: 1)
                 .frame(maxWidth: .infinity)

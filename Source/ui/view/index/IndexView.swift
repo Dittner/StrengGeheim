@@ -57,6 +57,10 @@ struct IndexIDCell: View {
                     self.selectAction()
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            .background(Color.SG.transparent)
+            .onTapGesture(count: 2, perform: {
+                self.selectAction()
+            })
 
             HSeparatorView(horizontalPadding: 0)
         }

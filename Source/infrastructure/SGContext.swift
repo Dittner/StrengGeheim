@@ -10,23 +10,27 @@ class SGContext {
     static var shared: SGContext = SGContext()
     private(set) var user: User
     private(set) var repo: IIndexRepository
-    private(set) var dispatcher: DomainEventDispatcher
+    private(set) var domainEventDispatcher: DomainEventDispatcher
+    private(set) var appEventDispatcher: AppEventDispatcher
+    private(set) var userActivityService: UserActivityService
 
     init() {
         SGContext.logAbout()
         logInfo(msg: "SharedContext initialized")
         user = User()
-        dispatcher = DomainEventDispatcher()
-        
+        domainEventDispatcher = DomainEventDispatcher()
+        appEventDispatcher = AppEventDispatcher()
+        userActivityService = UserActivityService(dispatcher: appEventDispatcher, user: user, navigator: Navigator.shared)
+
         #if os(iOS)
 
-        repo = CardIndexRepository(serializer: IndexSerializer(dispatcher: dispatcher),
-                                   dispatcher: dispatcher,
-                                   storeTo: URLS.documentsURL.appendingPathComponent("Index"))
+        repo = CardIndexRepository(serializer: IndexSerializer(dispatcher: domainEventDispatcher),
+                                   dispatcher: domainEventDispatcher,
+                                       storeTo: URLS.documentsURL.appendingPathComponent("Index"))
         #elseif os(OSX)
-        repo = CardIndexRepository(serializer: IndexSerializer(dispatcher: dispatcher),
-                                   dispatcher: dispatcher,
-                                   storeTo: URLS.documentsURL.appendingPathComponent("StrengGeheim/Index"))
+            repo = CardIndexRepository(serializer: IndexSerializer(dispatcher: domainEventDispatcher),
+                                       dispatcher: domainEventDispatcher,
+                                       storeTo: URLS.documentsURL.appendingPathComponent("StrengGeheim/Index"))
         #endif
     }
 

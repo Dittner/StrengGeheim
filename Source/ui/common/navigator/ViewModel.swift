@@ -13,7 +13,7 @@ class ViewModel {
         navigator = Navigator.shared
         user = SGContext.shared.user
         repo = SGContext.shared.repo
-        dispatcher = SGContext.shared.dispatcher
+        dispatcher = SGContext.shared.domainEventDispatcher
         
         navigatorSubscription = navigator.$screen
             .sink { screen in

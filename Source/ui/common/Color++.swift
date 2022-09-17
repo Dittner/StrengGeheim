@@ -32,7 +32,7 @@ extension Color {
     struct SGColors {
         let tint: Color = Color(rgb: 0x8C85B3)
         let text: Color = Color(rgb: 0xC8C8CF)
-        let black: Color = Color(rgb: 0x19191d)
+        let black: Color = Color(rgb: 0)
         let gray: Color = Color(rgb: 0x828287)
         let dark: Color = Color(rgb: 0x5B5B5E)
         let red: Color = Color(rgb: 0x7F2843)
@@ -40,7 +40,7 @@ extension Color {
         let transparent: Color = Color(rgb: 0).opacity(0.001)
         let navbarBg: Color = Color(rgb: 0x27282e)
         let navbarTitle: Color = Color(rgb: 0xa5a3ad)
-        let appBg: Color = Color(rgb: 0x191a1e)
+        let appBg: Color = Color(rgb: 0x1c1c21)
     }
 
 #elseif os(OSX)

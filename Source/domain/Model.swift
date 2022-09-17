@@ -28,6 +28,9 @@ class User: ObservableObject {
 
     func logout() {
         password = ""
+        selectedCard = nil
+        selectedIndex = nil
+        selectedIndexID = nil
         isLoggedIn = false
     }
 
@@ -66,7 +69,7 @@ class CardIndex: ObservableObject, Identifiable {
     @Published private(set) var cards: [Card]
 
     static func create(id: CardIndexID) -> CardIndex {
-        return CardIndex(id: id, cards: [], dispatcher: SGContext.shared.dispatcher)
+        return CardIndex(id: id, cards: [], dispatcher: SGContext.shared.domainEventDispatcher)
     }
 
     init(id: CardIndexID, cards: [Card], dispatcher: DomainEventDispatcher) {

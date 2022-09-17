@@ -5,7 +5,6 @@ class IndexVM: ViewModel, ObservableObject {
     static var shared: IndexVM = IndexVM(id: .index)
     let indexIDs: [CardIndexID]
 
-    private var disposeBag: Set<AnyCancellable> = []
     override init(id: ScreenID) {
         logInfo(msg: "IndexVM init")
         indexIDs = CardIndexID.allCases

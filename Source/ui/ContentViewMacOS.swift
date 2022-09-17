@@ -3,6 +3,10 @@ import SwiftUI
 struct ContentViewMacOS: View {
     @ObservedObject var navigator = Navigator.shared
     @ObservedObject var alertBox = AlertBox.shared
+    
+    func onTapped() {
+        logInfo(msg: "Tapped!")
+    }
 
     var body: some View {
         GeometryReader { geo in
@@ -44,6 +48,7 @@ struct ContentViewMacOS: View {
             }
         }.colorScheme(.dark)
         .frame(minWidth: 500, idealWidth: 800, idealHeight: 1000, alignment: .topLeading)
+        .onTapGesture(perform: self.onTapped)
     }
 }
 
