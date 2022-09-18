@@ -18,7 +18,6 @@ class LoginVM: ViewModel, ObservableObject {
             let cryptor = AESCryptor(pwd: user.password)
             repo.applyCryptor(cryptor)
             user.password = ""
-            Keyboard.dismiss()
             navigator.navigate(to: .index)
         } else {
             errorMsg = "Der Schlüssel ist ungültig"

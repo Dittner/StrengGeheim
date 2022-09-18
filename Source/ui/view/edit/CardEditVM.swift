@@ -82,7 +82,6 @@ class CardEditVM: ViewModel, ObservableObject {
     }
 
     func goBack() {
-        Keyboard.dismiss()
         user.selectedCard = nil
         showAlert = false
         navigator.goBack(to: .cardList)

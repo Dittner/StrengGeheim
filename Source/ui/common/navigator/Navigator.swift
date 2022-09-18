@@ -45,6 +45,7 @@ class Navigator: ObservableObject {
 
     func goBack(to: ScreenID) {
         if to == screen.activated {return}
+        Keyboard.dismiss()
         screen = Screen(activated: to, deactivated: screen.activated)
         withAnimation {
             screenPosition = ScreenPosition(leading: nil, center: to, trailing: screenPosition.center, goBack: true)
@@ -53,6 +54,7 @@ class Navigator: ObservableObject {
 
     func navigate(to: ScreenID) {
         if to == screen.activated {return}
+        Keyboard.dismiss()
         screen = Screen(activated: to, deactivated: screen.activated)
         withAnimation {
             screenPosition = ScreenPosition(leading: screenPosition.center, center: to, trailing: nil, goBack: false)

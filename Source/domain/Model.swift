@@ -6,6 +6,7 @@ class User: ObservableObject {
     @Published var selectedCard: Card?
     @Published var selectedIndex: CardIndex?
     @Published var password: String = ""
+    @Published var filter: String = ""
 
     fileprivate var encryptedPwd: String = ""
     var isLoggedIn: Bool = false

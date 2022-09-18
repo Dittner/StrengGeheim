@@ -4,6 +4,7 @@ import SwiftUI
 class CardListVM: ViewModel, ObservableObject {
     static var shared = CardListVM(id: .cardList)
     @Published private(set) var title: String = ""
+    @Published private(set) var allCards: [Card] = []
     @Published private(set) var cards: [Card] = []
     @Published private(set) var isLoading: Bool = true
 
@@ -11,6 +12,16 @@ class CardListVM: ViewModel, ObservableObject {
     override init(id: ScreenID) {
         logInfo(msg: "CardListVM init")
         super.init(id: id)
+        Publishers.CombineLatest(user.$filter, self.$allCards)
+            .map { search, allCards in
+                if search == "" {
+                    return allCards
+                } else {
+                    return allCards.filter { $0.text.hasSubstring(search) || $0.title.hasSubstring(search) }
+                }
+            }
+            .assign(to: \.cards, on: self)
+            .store(in: &disposeBag)
     }
 
     var loadCardsPublisher: AnyCancellable?
@@ -23,6 +34,7 @@ class CardListVM: ViewModel, ObservableObject {
 
         title = indexID.getTitle()
 
+        
         loadCardsPublisher = repo.read(indexID)
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { completion in
@@ -40,7 +52,7 @@ class CardListVM: ViewModel, ObservableObject {
             }, receiveValue: { cardIndex in
                 if let cardIndex = cardIndex {
                     self.user.selectedIndex = cardIndex
-                    self.cards = cardIndex.cards.filter { $0.text != "" }
+                    self.allCards = cardIndex.cards.filter { $0.text != "" }
                 } else {
                     let newIndex = CardIndex.create(id: indexID)
                     self.user.selectedIndex = newIndex
